@@ -1,0 +1,56 @@
+------------------
+미니SQL 프로젝트
+------------------
+
+SQL같은 타입의 쿼리 작성 후, 세미콜론 (;) 을 붙여주세요
+EXIT을 입력하거나 프로그램을 종료해주세요.
+
+miniSQL> 
+=== Parse Result ===
+Raw Input   : SELECT * FROM table;
+Type        : SELECT
+Command     : SELECT
+Table       : table
+Item Count  : 1
+Items       :
+  [1] *
+
+=== Select Result ===
+id | login_id | name | password | created_at
+1 | hong123 | Hong | pass1234 | 2026-04-08 18:30:00
+2 | changwon | changwon | passwd123 | 2026-04-00 00:00:00
+3 | changwon | changwon | passwd123 | 2026-04-08
+
+miniSQL> 
+=== Parse Result ===
+Raw Input   : SELECT login_id, created_at FROM table WHERE id = 2;
+Type        : SELECT
+Command     : SELECT
+Table       : table
+Item Count  : 2
+Items       :
+  [1] login_id
+  [2] created_at
+Where       : id = 2
+
+=== Select Result ===
+login_id | created_at
+changwon | 2026-04-00 00:00:00
+
+miniSQL> 
+=== Parse Result ===
+Raw Input   : SELECT name FROM table WHERE login_id = 'changwon';
+Type        : SELECT
+Command     : SELECT
+Table       : table
+Item Count  : 1
+Items       :
+  [1] name
+Where       : login_id = changwon
+
+=== Select Result ===
+name
+changwon
+changwon
+
+miniSQL> 미니SQL 종료.

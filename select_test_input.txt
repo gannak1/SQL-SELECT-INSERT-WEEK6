@@ -1,0 +1,4 @@
+SELECT * FROM table;
+SELECT login_id, created_at FROM table WHERE id = 2;
+SELECT name FROM table WHERE login_id = 'changwon';
+EXIT

@@ -1,0 +1,43 @@
+------------------
+미니SQL 프로젝트
+------------------
+
+SQL같은 타입의 쿼리 작성 후, 세미콜론 (;) 을 붙여주세요
+EXIT을 입력하거나 프로그램을 종료해주세요.
+
+miniSQL> 
+=== Parse Result ===
+Raw Input   : SELECT id, login_id FROM table WHERE id > 1;
+Type        : SELECT
+Command     : SELECT
+Table       : table
+Item Count  : 2
+Items       :
+  [1] id
+  [2] login_id
+Where       : id > 1
+
+=== Select Result ===
+id | login_id
+2 | changwon
+3 | changwon
+
+miniSQL> 
+=== Parse Result ===
+Raw Input   : SELECT id, login_id FROM table WHERE id < 3;
+Type        : SELECT
+Command     : SELECT
+Table       : table
+Item Count  : 2
+Items       :
+  [1] id
+  [2] login_id
+Where       : id < 3
+
+=== Select Result ===
+id | login_id
+1 | hong123
+2 | changwon
+
+miniSQL>       -> 
+입력값 에러.

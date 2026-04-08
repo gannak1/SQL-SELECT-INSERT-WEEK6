@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="MiniSQL/MiniSQL.vcxproj" Id="f6f3975f-1ce6-4a0f-a211-734dff3909da" />
+</Solution>
