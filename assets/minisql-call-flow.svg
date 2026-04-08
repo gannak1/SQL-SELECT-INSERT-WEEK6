@@ -1,0 +1,125 @@
+<svg width="1280" height="860" viewBox="0 0 1280 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="860" fill="#F6F3EC"/>
+  <text x="640" y="56" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" font-weight="700" fill="#243B4A">MiniSQL Internal Call Flow</text>
+  <text x="640" y="86" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">How functions call each other during one command execution</text>
+
+  <rect x="44" y="126" width="250" height="690" rx="24" fill="#FFFDF9" stroke="#243B4A" stroke-width="4"/>
+  <text x="169" y="166" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#243B4A">1. Entry / REPL</text>
+
+  <rect x="72" y="198" width="194" height="72" rx="16" fill="#F7D08A" stroke="#243B4A" stroke-width="3"/>
+  <text x="169" y="228" text-anchor="middle" font-family="Verdana, sans-serif" font-size="21" font-weight="700" fill="#243B4A">main()</text>
+  <text x="169" y="252" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">src/main.c</text>
+
+  <rect x="72" y="308" width="194" height="94" rx="16" fill="#F7D08A" stroke="#243B4A" stroke-width="3"/>
+  <text x="169" y="340" text-anchor="middle" font-family="Verdana, sans-serif" font-size="21" font-weight="700" fill="#243B4A">run_repl()</text>
+  <text x="169" y="364" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Prompt loop</text>
+  <text x="169" y="386" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">fgets + buffer</text>
+
+  <rect x="72" y="440" width="194" height="146" rx="16" fill="#F7D08A" stroke="#243B4A" stroke-width="3"/>
+  <text x="169" y="470" text-anchor="middle" font-family="Verdana, sans-serif" font-size="19" font-weight="700" fill="#243B4A">Helper calls inside</text>
+  <text x="169" y="498" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">trim_newline()</text>
+  <text x="169" y="522" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">trim_spaces()</text>
+  <text x="169" y="546" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">is_blank_string()</text>
+  <text x="169" y="570" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">is_exit_command()</text>
+
+  <rect x="72" y="622" width="194" height="100" rx="16" fill="#F7D08A" stroke="#243B4A" stroke-width="3"/>
+  <text x="169" y="654" text-anchor="middle" font-family="Verdana, sans-serif" font-size="19" font-weight="700" fill="#243B4A">Statement assembly</text>
+  <text x="169" y="680" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">append_input_line()</text>
+  <text x="169" y="704" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">has_complete_statement()</text>
+
+  <rect x="358" y="126" width="250" height="690" rx="24" fill="#FFFDF9" stroke="#243B4A" stroke-width="4"/>
+  <text x="483" y="166" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#243B4A">2. Parse Stage</text>
+
+  <rect x="386" y="198" width="194" height="88" rx="16" fill="#A8D5BA" stroke="#243B4A" stroke-width="3"/>
+  <text x="483" y="228" text-anchor="middle" font-family="Verdana, sans-serif" font-size="21" font-weight="700" fill="#243B4A">process_input_line()</text>
+  <text x="483" y="252" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Calls parser + executor</text>
+  <text x="483" y="274" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Prints parse errors</text>
+
+  <rect x="386" y="326" width="194" height="88" rx="16" fill="#A8D5BA" stroke="#243B4A" stroke-width="3"/>
+  <text x="483" y="356" text-anchor="middle" font-family="Verdana, sans-serif" font-size="21" font-weight="700" fill="#243B4A">parse_command()</text>
+  <text x="483" y="380" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Detects INSERT or SELECT</text>
+  <text x="483" y="402" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Initializes Command</text>
+
+  <rect x="386" y="452" width="194" height="154" rx="16" fill="#A8D5BA" stroke="#243B4A" stroke-width="3"/>
+  <text x="483" y="484" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">Detailed parser calls</text>
+  <text x="483" y="512" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_insert()</text>
+  <text x="483" y="536" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_select()</text>
+  <text x="483" y="560" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_condition()</text>
+  <text x="483" y="584" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_values_list()</text>
+
+  <rect x="386" y="644" width="194" height="112" rx="16" fill="#A8D5BA" stroke="#243B4A" stroke-width="3"/>
+  <text x="483" y="676" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">Tokenizer helpers</text>
+  <text x="483" y="702" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">match_keyword()</text>
+  <text x="483" y="726" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_identifier_token()</text>
+  <text x="483" y="750" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">parse_value_token()</text>
+
+  <rect x="672" y="126" width="250" height="690" rx="24" fill="#FFFDF9" stroke="#243B4A" stroke-width="4"/>
+  <text x="797" y="166" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#243B4A">3. Execute Stage</text>
+
+  <rect x="700" y="198" width="194" height="88" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="797" y="228" text-anchor="middle" font-family="Verdana, sans-serif" font-size="21" font-weight="700" fill="#243B4A">execute_command()</text>
+  <text x="797" y="252" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Switch by CommandType</text>
+  <text x="797" y="274" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">INSERT / SELECT</text>
+
+  <rect x="700" y="324" width="194" height="108" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="797" y="356" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">execute_insert()</text>
+  <text x="797" y="382" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">validate_insert_command()</text>
+  <text x="797" y="406" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">append_user_record()</text>
+
+  <rect x="700" y="470" width="194" height="154" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="797" y="502" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">execute_select()</text>
+  <text x="797" y="528" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">validate_select_command()</text>
+  <text x="797" y="552" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">read_all_users()</text>
+  <text x="797" y="576" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">split_csv_row()</text>
+  <text x="797" y="600" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">row_matches_condition()</text>
+
+  <rect x="700" y="662" width="194" height="94" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="797" y="694" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">Validation focus</text>
+  <text x="797" y="720" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">table name, value count,</text>
+  <text x="797" y="744" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">numeric fields</text>
+
+  <rect x="986" y="126" width="250" height="690" rx="24" fill="#FFFDF9" stroke="#243B4A" stroke-width="4"/>
+  <text x="1111" y="166" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#243B4A">4. Storage / Print</text>
+
+  <rect x="1014" y="198" width="194" height="132" rx="16" fill="#F8B4B4" stroke="#243B4A" stroke-width="3"/>
+  <text x="1111" y="230" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">storage.c</text>
+  <text x="1111" y="256" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">append_user_record()</text>
+  <text x="1111" y="280" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">read_all_users()</text>
+  <text x="1111" y="304" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">write_csv_field()</text>
+
+  <rect x="1014" y="370" width="194" height="132" rx="16" fill="#D8B4FE" stroke="#243B4A" stroke-width="3"/>
+  <text x="1111" y="402" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">printer.c</text>
+  <text x="1111" y="428" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">print_select_header()</text>
+  <text x="1111" y="452" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">print_user_row()</text>
+  <text x="1111" y="476" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">print_rows_selected()</text>
+
+  <rect x="1014" y="542" width="194" height="136" rx="16" fill="#FFF1C1" stroke="#243B4A" stroke-width="3"/>
+  <text x="1111" y="574" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#243B4A">Actual files/output</text>
+  <text x="1111" y="600" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">data/users.csv</text>
+  <text x="1111" y="624" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">console success message</text>
+  <text x="1111" y="648" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">console error message</text>
+
+  <path d="M266 234H386" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M370 220L386 234L370 248" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M266 356H370" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M354 342L370 356L354 370" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M580 242H700" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M684 228L700 242L684 256" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M894 378H1014" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M998 364L1014 378L998 392" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M894 548H1014" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M998 534L1014 548L998 562" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M169 270V308" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M155 292L169 308L183 292" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M483 286V326" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M469 310L483 326L497 310" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M797 286V324" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M783 308L797 324L811 308" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,3 @@
+MiniSQL users.id B-tree index is maintained in memory.
+The index is rebuilt from data/users.csv when the program starts.
+New INSERT operations update the in-memory index immediately.

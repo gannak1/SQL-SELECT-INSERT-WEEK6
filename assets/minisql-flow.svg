@@ -1,0 +1,51 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="420" fill="#F7F1E8"/>
+  <rect x="40" y="44" width="1120" height="332" rx="28" fill="#FFFDFC" stroke="#2F4858" stroke-width="4"/>
+
+  <rect x="86" y="146" width="176" height="126" rx="18" fill="#F4D6A0" stroke="#2F4858" stroke-width="4"/>
+  <text x="174" y="188" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#2F4858">CLI / REPL</text>
+  <text x="174" y="220" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">MiniSQL&gt; prompt</text>
+  <text x="174" y="246" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Read input</text>
+
+  <rect x="330" y="146" width="176" height="126" rx="18" fill="#A8D5BA" stroke="#2F4858" stroke-width="4"/>
+  <text x="418" y="188" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#2F4858">Parser</text>
+  <text x="418" y="220" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">INSERT / SELECT</text>
+  <text x="418" y="246" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Command struct</text>
+
+  <rect x="574" y="146" width="176" height="126" rx="18" fill="#93C5FD" stroke="#2F4858" stroke-width="4"/>
+  <text x="662" y="188" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#2F4858">Executor</text>
+  <text x="662" y="220" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Validate input</text>
+  <text x="662" y="246" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Dispatch action</text>
+
+  <rect x="818" y="94" width="176" height="126" rx="18" fill="#F8B4B4" stroke="#2F4858" stroke-width="4"/>
+  <text x="906" y="136" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#2F4858">Storage</text>
+  <text x="906" y="168" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Read / Write CSV</text>
+  <text x="906" y="194" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">data/users.csv</text>
+
+  <rect x="818" y="242" width="176" height="126" rx="18" fill="#D8B4FE" stroke="#2F4858" stroke-width="4"/>
+  <text x="906" y="284" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#2F4858">Printer</text>
+  <text x="906" y="316" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Result / Error</text>
+  <text x="906" y="342" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Console output</text>
+
+  <rect x="1038" y="156" width="74" height="106" rx="16" fill="#FFF1C1" stroke="#2F4858" stroke-width="4"/>
+  <text x="1075" y="194" text-anchor="middle" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#2F4858">CSV</text>
+  <text x="1075" y="224" text-anchor="middle" font-family="Verdana, sans-serif" font-size="16" fill="#2F4858">users</text>
+
+  <path d="M262 209H330" stroke="#2F4858" stroke-width="4" stroke-linecap="round"/>
+  <path d="M314 195L330 209L314 223" stroke="#2F4858" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M506 209H574" stroke="#2F4858" stroke-width="4" stroke-linecap="round"/>
+  <path d="M558 195L574 209L558 223" stroke="#2F4858" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M750 176H818" stroke="#2F4858" stroke-width="4" stroke-linecap="round"/>
+  <path d="M802 162L818 176L802 190" stroke="#2F4858" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M750 242H818" stroke="#2F4858" stroke-width="4" stroke-linecap="round"/>
+  <path d="M802 228L818 242L802 256" stroke="#2F4858" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M994 176H1038" stroke="#2F4858" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1022 162L1038 176L1022 190" stroke="#2F4858" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="600" y="96" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" font-weight="700" fill="#2F4858">MiniSQL Execution Flow</text>
+  <text x="600" y="124" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#2F4858">Input - Parse - Execute - Store - Print</text>
+</svg>

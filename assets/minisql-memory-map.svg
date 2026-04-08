@@ -1,0 +1,53 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" fill="#F6F2EA"/>
+  <text x="600" y="50" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" font-weight="700" fill="#243B4A">MiniSQL Memory Map</text>
+  <text x="600" y="80" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">Understanding stack, heap, static memory, and file storage in this project</text>
+
+  <rect x="84" y="130" width="300" height="520" rx="24" fill="#FFFDFC" stroke="#243B4A" stroke-width="4"/>
+  <text x="234" y="172" text-anchor="middle" font-family="Verdana, sans-serif" font-size="28" font-weight="700" fill="#243B4A">Static memory</text>
+  <text x="234" y="204" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Lives for the whole program</text>
+  <rect x="116" y="238" width="236" height="92" rx="16" fill="#F4D6A0" stroke="#243B4A" stroke-width="3"/>
+  <text x="234" y="274" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">String literals</text>
+  <text x="234" y="302" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">"MiniSQL&gt; "</text>
+  <text x="234" y="322" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">"Inserted 1 row"</text>
+  <rect x="116" y="360" width="236" height="110" rx="16" fill="#F4D6A0" stroke="#243B4A" stroke-width="3"/>
+  <text x="234" y="398" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Fixed meanings</text>
+  <text x="234" y="426" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">table name: users</text>
+  <text x="234" y="448" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">error message text</text>
+  <text x="234" y="470" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">prompt strings</text>
+
+  <rect x="450" y="130" width="300" height="520" rx="24" fill="#FFFDFC" stroke="#243B4A" stroke-width="4"/>
+  <text x="600" y="172" text-anchor="middle" font-family="Verdana, sans-serif" font-size="28" font-weight="700" fill="#243B4A">Stack</text>
+  <text x="600" y="204" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Local variables inside functions</text>
+  <rect x="482" y="238" width="236" height="112" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="600" y="274" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">run_repl()</text>
+  <text x="600" y="302" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">line[MAX_INPUT_LEN]</text>
+  <text x="600" y="324" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">buffer[MAX_INPUT_LEN]</text>
+  <text x="600" y="346" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">collecting</text>
+  <rect x="482" y="382" width="236" height="122" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="600" y="418" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">execute_select()</text>
+  <text x="600" y="446" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">rows[][]</text>
+  <text x="600" y="468" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">values[][128]</text>
+  <text x="600" y="490" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">matched_count</text>
+  <rect x="482" y="536" width="236" height="82" rx="16" fill="#93C5FD" stroke="#243B4A" stroke-width="3"/>
+  <text x="600" y="570" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Key idea</text>
+  <text x="600" y="598" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Created on function call,</text>
+  <text x="600" y="618" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">removed on return</text>
+
+  <rect x="816" y="130" width="300" height="520" rx="24" fill="#FFFDFC" stroke="#243B4A" stroke-width="4"/>
+  <text x="966" y="172" text-anchor="middle" font-family="Verdana, sans-serif" font-size="28" font-weight="700" fill="#243B4A">Heap and File</text>
+  <text x="966" y="204" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Dynamic memory is mostly unused here</text>
+  <rect x="848" y="238" width="236" height="110" rx="16" fill="#A8D5BA" stroke="#243B4A" stroke-width="3"/>
+  <text x="966" y="274" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Heap</text>
+  <text x="966" y="302" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">malloc / free</text>
+  <text x="966" y="324" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Not used much in this</text>
+  <text x="966" y="344" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">first version</text>
+  <rect x="848" y="382" width="236" height="132" rx="16" fill="#F8B4B4" stroke="#243B4A" stroke-width="3"/>
+  <text x="966" y="418" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Disk file</text>
+  <text x="966" y="446" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">data/users.csv</text>
+  <text x="966" y="468" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Not in RAM by default</text>
+  <text x="966" y="490" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">Loaded into RAM when read</text>
+  <rect x="848" y="548" width="236" height="70" rx="16" fill="#F8B4B4" stroke="#243B4A" stroke-width="3"/>
+  <text x="966" y="578" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Program ends -> file remains</text>
+  <text x="966" y="602" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">But stack data disappears</text>
+</svg>

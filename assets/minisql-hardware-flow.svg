@@ -1,0 +1,61 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" fill="#F5F1E8"/>
+  <text x="600" y="52" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" font-weight="700" fill="#243B4A">MiniSQL and Computer Hardware</text>
+  <text x="600" y="82" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">How one SQL command moves through CPU, RAM, and SSD/HDD</text>
+
+  <rect x="48" y="120" width="220" height="120" rx="22" fill="#F4D6A0" stroke="#243B4A" stroke-width="4"/>
+  <text x="158" y="165" text-anchor="middle" font-family="Verdana, sans-serif" font-size="28" font-weight="700" fill="#243B4A">User</text>
+  <text x="158" y="198" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Keyboard input</text>
+
+  <rect x="330" y="120" width="240" height="170" rx="22" fill="#A8D5BA" stroke="#243B4A" stroke-width="4"/>
+  <text x="450" y="162" text-anchor="middle" font-family="Verdana, sans-serif" font-size="30" font-weight="700" fill="#243B4A">CPU</text>
+  <text x="450" y="196" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Runs C code</text>
+  <text x="450" y="224" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">repl -> parser -> executor</text>
+  <text x="450" y="252" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">if / while / function calls</text>
+
+  <rect x="630" y="120" width="260" height="220" rx="22" fill="#93C5FD" stroke="#243B4A" stroke-width="4"/>
+  <text x="760" y="162" text-anchor="middle" font-family="Verdana, sans-serif" font-size="30" font-weight="700" fill="#243B4A">RAM</text>
+  <text x="760" y="196" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Temporary working memory</text>
+  <text x="760" y="226" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">line / buffer</text>
+  <text x="760" y="254" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Command struct</text>
+  <text x="760" y="282" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">CSV rows / split values</text>
+  <text x="760" y="310" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Exists only while running</text>
+
+  <rect x="950" y="120" width="200" height="170" rx="22" fill="#F8B4B4" stroke="#243B4A" stroke-width="4"/>
+  <text x="1050" y="162" text-anchor="middle" font-family="Verdana, sans-serif" font-size="30" font-weight="700" fill="#243B4A">SSD / HDD</text>
+  <text x="1050" y="196" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Persistent storage</text>
+  <text x="1050" y="224" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">data/users.csv</text>
+  <text x="1050" y="252" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#243B4A">Remains after exit</text>
+
+  <rect x="160" y="390" width="880" height="168" rx="24" fill="#FFFDFC" stroke="#243B4A" stroke-width="4"/>
+  <text x="600" y="430" text-anchor="middle" font-family="Verdana, sans-serif" font-size="28" font-weight="700" fill="#243B4A">Example: SELECT * FROM users WHERE id = 1;</text>
+  <text x="240" y="480" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">1. User types a command</text>
+  <text x="240" y="512" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">2. CPU runs parser and executor code</text>
+  <text x="240" y="544" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">3. Command string and rows stay in RAM</text>
+  <text x="680" y="480" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">4. storage.c reads users.csv from disk</text>
+  <text x="680" y="512" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">5. CPU compares id values in RAM</text>
+  <text x="680" y="544" font-family="Verdana, sans-serif" font-size="18" fill="#243B4A">6. printer.c prints the matching row</text>
+
+  <rect x="118" y="588" width="964" height="72" rx="18" fill="#FFF7DB" stroke="#243B4A" stroke-width="3"/>
+  <text x="600" y="619" text-anchor="middle" font-family="Verdana, sans-serif" font-size="18" font-weight="700" fill="#243B4A">Physical view</text>
+  <text x="600" y="646" text-anchor="middle" font-family="Verdana, sans-serif" font-size="16" fill="#243B4A">The CSV file is physically stored on SSD/HDD. When SELECT runs, the OS reads file bytes from disk into RAM, and then the CPU processes that RAM data.</text>
+
+  <path d="M268 180H330" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M314 166L330 180L314 194" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M570 206H630" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M614 192L630 206L614 220" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M890 206H950" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M934 192L950 206L934 220" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M1010 290C1010 344 928 374 852 392" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M861 376L852 392L868 402" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="972" y="350" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">read file from disk</text>
+  <text x="960" y="368" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">into RAM</text>
+
+  <path d="M708 340C700 360 660 376 620 390" stroke="#243B4A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M624 372L620 390L637 398" stroke="#243B4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="668" y="362" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">CPU works on data</text>
+  <text x="668" y="380" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#243B4A">already loaded in RAM</text>
+</svg>
