@@ -1,0 +1,5 @@
+RESULT: users
+id,name
+1,Alice
+3,Charlie
+ROWS: 2

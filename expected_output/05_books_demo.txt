@@ -1,0 +1,6 @@
+OK: 1 row inserted into books
+OK: 1 row inserted into books
+RESULT: books
+title,author
+CSAPP,Bryant
+ROWS: 1

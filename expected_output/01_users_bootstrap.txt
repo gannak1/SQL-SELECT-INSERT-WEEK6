@@ -1,0 +1,9 @@
+OK: 1 row inserted into users
+OK: 1 row inserted into users
+OK: 1 row inserted into users
+RESULT: users
+id,name,age
+1,Alice,30
+2,Bob,24
+3,Charlie,29
+ROWS: 3

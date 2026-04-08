@@ -1,0 +1,4 @@
+RESULT: users
+id,name,age
+2,Bob,24
+ROWS: 1

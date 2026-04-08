@@ -1,0 +1,2 @@
+table=books
+columns=id:INT,title:TEXT,author:TEXT,price:INT

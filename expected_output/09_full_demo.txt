@@ -1,0 +1,20 @@
+OK: 1 row inserted into users
+OK: 1 row inserted into users
+OK: 1 row inserted into users
+RESULT: users
+id,name,age
+1,Alice,30
+2,Bob,24
+3,Charlie,29
+ROWS: 3
+RESULT: users
+id,name
+1,Alice
+3,Charlie
+ROWS: 2
+OK: 1 row inserted into books
+OK: 1 row inserted into books
+RESULT: books
+title,author
+CSAPP,Bryant
+ROWS: 1
