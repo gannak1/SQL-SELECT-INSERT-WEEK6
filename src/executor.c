@@ -39,7 +39,7 @@ int execute_statement(ASTNode *root, Status *status) {
         return 0;
     }
 
-    table_node = find_child(root, NODE_TABLE);
+    table_node = find_child(root, NODE_TABLE); // node table 찾기
     if (!extract_table_names(table_node, &schema_name, &table_name)) {
         snprintf(status->message, sizeof(status->message), "Parse error: table node is missing");
         return 0;

@@ -1,0 +1,107 @@
+ASTNode
+ * 노드 기반 AST의 기본 구조체다.
+ * text에는 컬럼명, 테이블명, 실제 literal 값, 연산자 문자열 등이 들어간다.
+ * first_child는 첫 자식 노드, next_sibling은 같은 부모를 가진 다음 노드다.
+
+runsql
+
+lex_sql로 각 글자를 토큰화
+
+parse_statement로 적절한 파서로 보내기
+
+lex_sql
+if가 총 4개로 구성되며 해당 if마다 true면 토큰을 만들어서 배열에 넣고 아니면 free를 하여 다시 빈 배열을 리턴함
+push_token 이라는 걸로 token_array에 token을 할당하는데 *,.()=><; =< => != 이면 각각 맞는 토큰 타입으로 토큰 배열에 들어가게 됨, 이때 토큰 배열은 realloc으로 되어서 크기가 변하더라도 동적으로 대응이 가능하도록 설계 되어 있음
+만약 '을 만난다면 해당 인덱스부터 천천히 순회하여 \0 또는 \'이 나올 때 까지 순회, 만약 \0이면 중지하고 malloc을 해제하여 빈 배열을 리턴함 
+string으로 인식하여 토큰 타입을 스트링 타입으로 만든 다음 토큰 배열에 넣어짐
+만약 숫자면 위의 스트링과 마찬가지로 처음부터 숫자가 안나올때 까지 모두 검사하고 토큰에 넣음, 처음에 +, -를 인식하여 숫자의 음수인지 양수인지 확인
+아무것도 아닌 채로 글자, _만 적혀져 있으면 테이블, 스키마 등으로 인식하면 TOKEN_IDENTIFIER로, keyword_type로 예약어인지 확인하여 적절한 타입으로 token array에 넣어짐
+오류 없이 끝나면 token_eof 타입을 넣고 배열이 리턴
+
+
+
+parse_statement
+Parse struct로 parse가 선언되어 있는데 token의 각 array를 index로 확인하는 용도, index는 현재 index, tokens는 토큰 모음
+토큰이 아무것도 없으면 리턴하여 에러 메세지 출력
+current token으로 현재 토큰이 뭔지 확인, &parse->tokens->items[parse->index]
+
+
+parse_insert
+expect 함수로 함수가 해당하는 타입이 맞는지 검사, 검사를 하고 맞으면 index가 1씩 올라가는 구조 아니면 메세지와 0을 리턴
+parse의 타입이 TOKEN_KEYWORD_INSERT -> TOKEN_KEYWORD_INTO (select, into)를 검사하고 테이블 노드를 만듬
+그다음 TOKEN_KEWORD_VALUES -> TOKEN_LPAREN (value, ( )
+리스트 노드를 만들고
+TOKEN_RPAREN -> TOKEN_SEMICOLON -> TOKEN_EOF ( ), ;, EOF )
+create_ast_node
+
+
+
+parse_select
+expect 함수로 함수가 해당하는 타입이 맞는지 검사, 검사를 하고 맞으면 index가 1씩 올라가는 구조 아니면 메세지와 0을 리턴
+parse의 타입이 TOKEN_KEYWORD_SELECT -> TOKEN_KEYWORD_INTO (select, into)를 검사하고 테이블 노드를 만듬
+그다음 TOKEN_KEWORD_VALUES -> TOKEN_LPAREN (value, ( )
+리스트 노드를 만들고
+TOKEN_RPAREN -> TOKEN_SEMICOLON -> TOKEN_EOF ( ), ;, EOF )
+create_ast_node
+
+
+
+parse_column_list_node
+list_node----col1 first_child
+               L---col2 next_sibling 
+	       L---col3 next_sibling
+select 노드의 컬럼을 담는 노드
+먼저 list_node를 만듬, 이때 text는 빈 내용
+토큰이 TOKEN_START(*)이면 text가 *인 column_node 노드를 만듬
+column_node에 에러가 생겨서 NULL이면 리턴
+list_node에 first_child를 column_node를 붙이고 list_node 리턴
+그것 외 없으면
+while문을 돌리게 됨
+parse_identifier_text로 column_name을 얻고, 이름이 NULL이면 에러
+얻은 이름으로 create_ast_node로 column_node를 만들고 에러 생기면 NULL 리턴하고 각각 list_node에 first_child, next_sibling에 적절하게 배치
+
+
+
+parse_table_node
+table_node----schema
+               L---table
+노드 구조 만들려고 함
+이 SQL이 어떤 테이블을 대상으로 하는지 를 AST 안에 담는 역할입니다.
+first_identifier로 첫번째 텍스트 값이 뭔지를 받고 만약 NULL이면 종료
+그다음 table_node라는 것을 만들고 create_ast_node로 노드를 만듬
+table_node가 NULL로 나오면 해제하고 메세지 출력
+만약 parser가 TOKEN_DOT이면 table_text에 parse_identifier_text 할당
+table_text가 NULL이면 에러 출력 
+schema.table 와 같은 형태면 -> table 이름을 table_name_node에, schema를 schema_node에 넣음 create_ast_node로 각각 만들고 이전(first_child)를 schema, 형제(next_sibling)를 schema_node에 넣는다.
+점이 없으면 schema_node에 기본 schema 이름(school)을 넣는다.
+그리고 table_node를 리턴
+
+
+
+parse_where_node
+parse_identifier_text로 column 인지 판별 후 column_name에 할당, 또한 연산자도 parse_operator_text로 판별, 값도 parse_value_node로 판별
+NULL이면 오류로 리턴
+text가 NULL인 where_node, text가 column_name인 column_node, text가 operator_text 인 operator_node 생성
+wehre_node에 column_node, operator_node, value_node를 각각 first_child, next_sibling으로 연결
+
+
+create_ast_node
+노드 하나 생성하는 함수, ASTNode 타입으로 node를 생성하고 type, text, value_type를 받아서 각각 값에 할당, text는 sp_strdup로 복사해서 할당, 메모리 오류로 malloc이 오류나거나 text가 NULL이 아니고 node의 텍스트가 null이면 NULL 리턴 node의 text가 null이면 NULL 반환, first_child, next_sibling을 NULL로 할당 후 node 리턴
+
+
+
+parse_identifier_text
+TOKEN_IDENTIFIER가 아니면 NULL 리턴, 맞으면 copy로 text를 모두 복사하고 parser의 index를 하나 더하고 copy를 리턴, 현재 테이블이 TOKEN_IDENTIFIER로 되어있음
+
+
+
+sp_strdup
+text를 copy로 새로 복사해서 리턴
+
+
+parse_operator_text
+현재 토큰이 비교 연산자면 해당 연산자 문자열을 반환한다., switch, case로 paser의 text로 구분
+
+
+
+parse_select

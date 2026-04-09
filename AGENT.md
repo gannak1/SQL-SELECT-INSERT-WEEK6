@@ -1,42 +1,50 @@
 ﻿# AGENT.md
 
-## ?꾨줈?앺듃 媛쒖슂
-???꾨줈?앺듃??C ?몄뼱濡?援ы쁽?섎뒗 ?뚯씪 湲곕컲 SQL 泥섎━湲곗씠??
+## 프로젝트 개요
+이 프로젝트는 C 언어로 구현하는 파일 기반 SQL 처리기이다.
 
-紐⑺몴???ㅼ쓬怨?媛숇떎.
+목표는 다음과 같다.
 
-- SQL ?뚯씪 ?먮뒗 CLI ?낅젰?쇰줈 SQL 臾몄옣??諛쏅뒗??
-- SQL 臾몄옣???뚯떛?쒕떎.
-- ?뚯떛 寃곌낵瑜??ㅽ뻾?쒕떎.
-- `INSERT`??諛붿씠?덈━ ?곗씠???뚯씪??row瑜???ν븳??
-- `SELECT`??諛붿씠?덈━ ?곗씠???뚯씪?먯꽌 row瑜??쎌뼱 異쒕젰?쒕떎.
+- SQL 파일 또는 CLI 입력으로 SQL 문장을 받는다.
+- SQL 문장을 파싱한다.
+- 파싱 결과를 실행한다.
+- `INSERT`는 바이너리 데이터 파일에 row를 저장한다.
+- `SELECT`는 바이너리 데이터 파일에서 row를 읽어 출력한다.
 
-援ы쁽 ?곗꽑?쒖쐞???숈뒿蹂대떎 寃곌낵臾??꾩꽦???붾떎.  
-?? ?듭떖 濡쒖쭅? ??먯씠 吏곸젒 ?ㅻ챸?????덉뼱???쒕떎.
+구현 우선순위는 학습보다 결과물 완성에 둔다.  
+단, 핵심 로직은 팀원이 직접 설명할 수 있어야 한다.
 
 ---
 
-## ?꾩젣 議곌굔
-- `schema`???대? 議댁옱?쒕떎怨?媛?뺥븳??
-- 媛?`schema` ?꾨옒??`table`???대? 議댁옱?쒕떎怨?媛?뺥븳??
-- `CREATE SCHEMA`, `CREATE TABLE`? 援ы쁽?섏? ?딅뒗??
-- SQL Processor??湲곗〈 `schema.table`????댁꽌留?`INSERT`, `SELECT`瑜??섑뻾?쒕떎.
+## 전제 조건
+- `schema`는 이미 존재한다고 가정한다.
+- 각 `schema` 아래의 `table`도 이미 존재한다고 가정한다.
+- `CREATE SCHEMA`, `CREATE TABLE`은 구현하지 않는다.
+- SQL Processor는 기존 `schema.table`에 대해서만 `INSERT`, `SELECT`를 수행한다.
 
-??
+예:
 - `school.users`
 - `school.scores`
 
 ---
 
-## 吏??踰붿쐞
+## 지원 범위
 
-### 理쒖냼 吏??SQL
+### 최소 지원 SQL
 - `INSERT INTO schema.table VALUES (...)`
 - `SELECT * FROM schema.table`
 - `SELECT col1, col2 FROM schema.table`
-- `SELECT ... FROM schema.table WHERE column = value`
+- `SELECT ... FROM schema.table WHERE column operator value`
 
-### 鍮꾩???踰붿쐞
+### 지원 비교 연산자
+- `=`
+- `!=`
+- `>`
+- `>=`
+- `<`
+- `<=`
+
+### 비지원 범위
 - `CREATE SCHEMA`
 - `CREATE TABLE`
 - `UPDATE`
@@ -44,19 +52,19 @@
 - `JOIN`
 - `ORDER BY`
 - `GROUP BY`
-- ?ㅼ쨷 WHERE 議곌굔
-- ?ㅼ젣 ?몃뜳??援ы쁽
+- 다중 WHERE 조건
+- 실제 인덱스 구현
 
 ---
 
-## ???援ъ“
+## 저장 구조
 
-### ?듭떖 ?먯튃
-- ?ㅼ젣 row ?곗씠?곕뒗 諛붿씠?덈━ ?뚯씪????ν븳??
-- 而щ읆 ?ㅼ젙 ?뺣낫??CSV 硫뷀??뚯씪濡?蹂꾨룄 ??ν븳??
-- ?꾨줈洹몃옩? 硫뷀??뚯씪??癒쇱? ?쎄퀬, 洹??뺣낫瑜?湲곗??쇰줈 諛붿씠?덈━ row瑜??댁꽍?쒕떎.
+### 핵심 원칙
+- 실제 row 데이터는 바이너리 파일에 저장한다.
+- 컬럼 설정 정보는 CSV 메타파일로 별도 저장한다.
+- 프로그램은 메타파일을 먼저 읽고, 그 정보를 기준으로 바이너리 row를 해석한다.
 
-### ?붾젆?곕━ ?덉떆
+### 디렉터리 예시
 ```text
 meta/
   school/
@@ -67,7 +75,7 @@ data/
     users.dat
 ```
 
-### 硫뷀??뚯씪 ?덉떆
+### 메타파일 예시
 `meta/school/users.schema.csv`
 
 ```csv
@@ -77,159 +85,103 @@ name,CHAR,20
 age,INT,4
 ```
 
-?섎?:
-- `id`??4諛붿씠???뺤닔
-- `name`? 20諛붿씠??臾몄옄??- `age`??4諛붿씠???뺤닔
+의미:
+- `id`는 4바이트 정수
+- `name`은 20바이트 문자열
+- `age`는 4바이트 정수
 
-### ?곗씠???뚯씪 ?덉떆
+### 데이터 파일 예시
 `data/school/users.dat`
 
-???뚯씪? ?щ엺???쎈뒗 ?띿뒪?멸? ?꾨땲???ㅼ젣 諛붿씠?덈━ row媛 ?곗냽 ??λ릺???뚯씪?대떎.
+이 파일은 사람이 읽는 텍스트가 아니라 실제 바이너리 row가 연속 저장되는 파일이다.
 
-而щ읆 ?뺤쓽媛 ?꾨옒? 媛숈쑝硫?
+컬럼 정의가 아래와 같으면:
 
 - `id : INT -> 4 bytes`
 - `name : CHAR(20) -> 20 bytes`
 - `age : INT -> 4 bytes`
 
-row ?섎굹???ш린??珥?28諛붿씠?몃떎.
+row 하나의 크기는 총 28바이트다.
 
-利??곗씠?곕뒗 ?ㅼ쓬泥섎읆 ??λ맂??
+즉 데이터는 다음처럼 저장된다.
 
 ```text
-[row1 28諛붿씠??[row2 28諛붿씠??[row3 28諛붿씠??...
+[row1 28바이트][row2 28바이트][row3 28바이트]...
 ```
 
 ---
 
-## 諛붿씠?덈━ ???洹쒖튃
+## 바이너리 저장 규칙
 
-### ??낅퀎 ???諛⑹떇
+### 타입별 저장 방식
 - `INT`
-  - 4諛붿씠???뺤닔濡????- `CHAR(n)`
-  - ?뺥솗??`n`諛붿씠???곸뿭 ?ъ슜
-  - 臾몄옄??湲몄씠媛 吏㏃쑝硫??⑤뒗 怨듦컙? `\0` ?먮뒗 怨듬갚?쇰줈 梨꾩?
+  - 4바이트 정수로 저장
+- `CHAR(n)`
+  - 정확히 `n`바이트 영역 사용
+  - 문자열 길이가 짧으면 남는 공간은 `\0` 또는 공백으로 채움
 
-??
-- `CHAR(20)`??`"hi"` ?????- ?ㅼ젣 ??μ? 20諛붿씠???ъ슜
-- ?섎㉧吏??鍮?媛믪쑝濡?梨꾩?
+예:
+- `CHAR(20)`에 `"hi"` 저장 시
+- 실제 저장은 20바이트 사용
+- 나머지는 빈 값으로 채움
 
-### row ????쒖꽌
-媛?row??硫뷀??뚯씪???뺤쓽??而щ읆 ?쒖꽌?濡???ν븳??
+### row 저장 순서
+각 row는 메타파일에 정의된 컬럼 순서대로 저장한다.
 
-??
+예:
 - `id`
 - `name`
 - `age`
 
-?대㈃ row????긽 ?꾨옒 ?쒖꽌濡?湲곕줉?쒕떎.
+이면 row는 항상 아래 순서로 기록한다.
 
 ```text
-[id 4諛붿씠??[name 20諛붿씠??[age 4諛붿씠??
+[id 4바이트][name 20바이트][age 4바이트]
 ```
 
-### row ?ш린 怨꾩궛
-row ?ш린??硫뷀??뚯씪??`size` ?⑹쑝濡?怨꾩궛?쒕떎.
+### row 크기 계산
+row 크기는 메타파일의 `size` 합으로 계산한다.
 
-??
+예:
 - `id = 4`
 - `name = 20`
 - `age = 4`
 
-珥?`row_size = 28`
+총 `row_size = 28`
 
 ---
 
-## ?대? ?먮즺援ъ“
+## 내부 자료구조
 
-### SQL ?뚯떛???먮즺援ъ“
-SQL 臾몄옄?댁쓣 ?뚯떛?????대??곸쑝濡?AST ?ㅽ???援ъ“泥대줈 ?쒗쁽?쒕떎.
+### SQL 파싱용 자료구조
+SQL 문자열은 lexer를 거쳐 토큰 배열이 되고, parser는 그 토큰들을 노드 기반 AST로 변환한다.
 
-?덉긽 ???
+핵심 요소:
 - `TokenType`
 - `Token`
-- `SqlValue`
-- `WhereClause`
-- `InsertStmt`
-- `SelectStmt`
-- `Statement`
+- `ASTValueType`
+- `NodeType`
+- `ASTNode`
 
-?덉떆:
+### AST 구조 원칙
+현재 구현은 노드 기반 AST를 사용한다.
 
-```c
-typedef enum {
-    TOKEN_IDENTIFIER,
-    TOKEN_STRING,
-    TOKEN_NUMBER,
-    TOKEN_STAR,
-    TOKEN_COMMA,
-    TOKEN_DOT,
-    TOKEN_LPAREN,
-    TOKEN_RPAREN,
-    TOKEN_EQUAL,
-    TOKEN_SEMICOLON,
-    TOKEN_EOF,
-    TOKEN_KEYWORD_INSERT,
-    TOKEN_KEYWORD_INTO,
-    TOKEN_KEYWORD_VALUES,
-    TOKEN_KEYWORD_SELECT,
-    TOKEN_KEYWORD_FROM,
-    TOKEN_KEYWORD_WHERE
-} TokenType;
-
-typedef struct {
-    TokenType type;
-    char *text;
-} Token;
-
-typedef enum {
-    VALUE_STRING,
-    VALUE_NUMBER
-} ValueType;
-
-typedef struct {
-    ValueType type;
-    char *raw;
-} SqlValue;
-
-typedef struct {
-    char *column_name;
-    SqlValue value;
-} WhereClause;
-
-typedef struct {
-    char *schema_name;
-    char *table_name;
-    SqlValue *values;
-    int value_count;
-} InsertStmt;
-
-typedef struct {
-    int select_all;
-    char **columns;
-    int column_count;
-    char *schema_name;
-    char *table_name;
-    int has_where;
-    WhereClause where;
-} SelectStmt;
-
-typedef enum {
-    STMT_INSERT,
-    STMT_SELECT
-} StatementType;
-
-typedef struct {
-    StatementType type;
-    union {
-        InsertStmt insert_stmt;
-        SelectStmt select_stmt;
-    };
-} Statement;
+예:
+```text
+SELECT
+├── COLUMN_LIST
+│   └── COLUMN("name")
+├── TABLE
+│   ├── IDENTIFIER("school")
+│   └── IDENTIFIER("users")
+└── WHERE
+    ├── COLUMN("id")
+    ├── OPERATOR("=")
+    └── VALUE("1")
 ```
 
-### ????ㅽ뻾???먮즺援ъ“
-硫뷀??뚯씪???쎌뼱 ?뚯씠釉?援ъ“瑜?硫붾え由щ줈 ?щ┫ ?뚮뒗 ?꾨옒 援ъ“瑜??ъ슜?쒕떎.
+### 저장 실행용 자료구조
+메타파일을 읽어 테이블 구조를 메모리로 올릴 때는 아래 구조를 사용한다.
 
 ```c
 typedef enum {
@@ -254,147 +206,162 @@ typedef struct {
 } TableMeta;
 ```
 
-?ㅻ챸:
-- `name`: 而щ읆紐?- `type`: 而щ읆 ???- `size`: 諛붿씠???ш린
-- `offset`: row ?대? ?쒖옉 ?꾩튂
-- `row_size`: row ?꾩껜 ?ш린
+설명:
+- `name`: 컬럼명
+- `type`: 컬럼 타입
+- `size`: 바이트 크기
+- `offset`: row 내부 시작 위치
+- `row_size`: row 전체 크기
 
 ---
 
-## ?ㅽ뻾 ?먮쫫
+## 실행 흐름
 
 ### INSERT
-1. SQL???뚯떛??`InsertStmt` ?앹꽦
-2. `schema.table`???대떦?섎뒗 硫뷀? CSV ?뚯씪 ?쎄린
-3. 硫뷀??뺣낫濡?而щ읆 媛쒖닔? ????뺤씤
-4. ?낅젰 媛?媛쒖닔? ???寃利?5. row 踰꾪띁 ?앹꽦
-6. 媛?而щ읆 ?쒖꽌??留욊쾶 諛붿씠?덈━ 媛?湲곕줉
-7. `.dat` ?뚯씪 ?앹뿉 append
+1. SQL을 파싱해 `NODE_INSERT` 루트 AST 생성
+2. `NODE_TABLE`에서 `schema.table` 추출
+3. 메타 CSV 파일 읽기
+4. 메타정보로 컬럼 개수와 타입 확인
+5. `NODE_VALUE_LIST`를 읽어 row 버퍼 생성
+6. 각 컬럼 순서에 맞게 바이너리 값 기록
+7. `.dat` 파일 끝에 append
 
 ### SELECT
-1. SQL???뚯떛??`SelectStmt` ?앹꽦
-2. 硫뷀? CSV ?뚯씪 ?쎄린
-3. `row_size` 怨꾩궛
-4. `.dat` ?뚯씪?먯꽌 `row_size` ?⑥쐞濡?諛섎났 ?쎄린
-5. 媛?row?먯꽌 而щ읆蹂?媛믪쓣 蹂듭썝
-6. `WHERE`媛 ?덉쑝硫?議곌굔 寃??7. ?듦낵??row留?異쒕젰
+1. SQL을 파싱해 `NODE_SELECT` 루트 AST 생성
+2. `NODE_TABLE`에서 `schema.table` 추출
+3. 메타 CSV 파일 읽기
+4. `row_size` 계산
+5. `.dat` 파일에서 `row_size` 단위로 반복 읽기
+6. 각 row에서 컬럼별 값을 복원
+7. `NODE_WHERE`가 있으면 조건 검사
+8. 통과한 row만 출력
 
 ---
 
-## WHERE ?숈옉 諛⑹떇
-湲곕낯 援ы쁽?먯꽌 `WHERE`???⑥씪 議곌굔留?吏?먰븳??
+## WHERE 동작 방식
+기본 구현에서 `WHERE`는 단일 조건만 지원한다.
 
-??
+예:
 ```sql
 SELECT name FROM school.users WHERE id = 3;
+SELECT * FROM users WHERE age >= 10;
 ```
 
-?숈옉:
-- 硫뷀??뚯씪?먯꽌 `id` 而щ읆??offset怨?size瑜?李얜뒗??
-- 媛?row瑜??쎈뒗??
-- ?대떦 offset ?꾩튂??媛믪쓣 爰쇰궡 議곌굔怨?鍮꾧탳?쒕떎.
-- ?쇱튂?섎㈃ ?좏깮 而щ읆留?異쒕젰?쒕떎.
+동작:
+- 메타파일에서 비교 컬럼의 offset과 size를 찾는다.
+- 각 row를 읽는다.
+- 해당 offset 위치의 값을 꺼내 연산자에 맞게 비교한다.
+- 일치하면 선택 컬럼만 출력한다.
 
-利?湲곕낯 援ы쁽? ?몃뜳???놁씠 row瑜?泥섏쓬遺???앷퉴吏 寃?ы븯???쒖감 ?먯깋 諛⑹떇?대떎.
+즉 기본 구현은 인덱스 없이 row를 처음부터 끝까지 검사하는 순차 탐색 방식이다.
 
-二쇱쓽:
-- ?ㅼ젣 DB??鍮좊Ⅸ 寃?됱쓣 ?꾪빐 `B-Tree` ?몃뜳?ㅻ? 留롮씠 ?ъ슜?쒕떎.
-- ?대쾲 ?꾨줈?앺듃??援ы쁽 ?⑥닚?깆쓣 ?꾪빐 ?몃뜳???녿뒗 ?쒖감 ?먯깋?쇰줈 泥섎━?쒕떎.
-
----
-
-## 硫붾え由??ъ슜 ?먯튃
-- ?꾩껜 ?뚯씠釉붿쓣 硫붾え由ъ뿉 紐⑤몢 ?щ━吏 ?딅뒗??
-- 硫뷀??뺣낫(`TableMeta`)??硫붾え由ъ뿉 ?좎??쒕떎.
-- ?곗씠???뚯씪? row ?섎굹???쎈뒗??
-- ?꾩옱 SQL 1媛쒖? ?꾩옱 row 1媛쒕쭔 以묒떖?쇰줈 泥섎━?쒕떎.
-
-利??꾨줈洹몃옩 ?ъ떆???꾩뿉???뺣낫媛 ?좎??섎젮硫?
-- 而щ읆紐?- ???- ?ш린
-
-???뺣낫??諛섎뱶??硫뷀? CSV ?뚯씪????λ릺???덉뼱???쒕떎.
+주의:
+- 실제 DB는 빠른 검색을 위해 `B-Tree` 인덱스를 많이 사용한다.
+- 이번 프로젝트는 구현 단순성을 위해 인덱스 없는 순차 탐색으로 처리한다.
 
 ---
 
-## CLI 洹쒓꺽
+## 메모리 사용 원칙
+- 전체 테이블을 메모리에 모두 올리지 않는다.
+- 메타정보(`TableMeta`)는 메모리에 유지한다.
+- 데이터 파일은 row 하나씩 읽는다.
+- 현재 SQL 1개와 현재 row 1개만 중심으로 처리한다.
 
-### ?뚯씪 ?ㅽ뻾 紐⑤뱶
+즉 프로그램 재시작 후에도 정보가 유지되려면:
+- 컬럼명
+- 타입
+- 크기
+
+이 정보는 반드시 메타 CSV 파일에 저장되어 있어야 한다.
+
+---
+
+## CLI 규격
+
+### 파일 실행 모드
 ```bash
 sql_processor sample.sql
 ```
 
-### REPL 紐⑤뱶
+### REPL 모드
 ```bash
 sql_processor --repl
 ```
 
-REPL?먯꽌??SQL????臾몄옣???낅젰諛쏆븘 ?ㅽ뻾?섍퀬, `exit` ?먮뒗 `quit` ?낅젰 ??醫낅즺?쒕떎.
+REPL에서는 SQL을 한 문장씩 입력받아 실행하고, `exit` 또는 `quit` 입력 시 종료한다.
 
 ---
 
-## 異쒕젰 洹쒖튃
-- INSERT ?깃났 ??
+## 출력 규칙
+- INSERT 성공 시:
   - `1 row inserted.`
-- SELECT ?깃났 ??
-  - ?좏깮 而щ읆 ?ㅻ뜑 異쒕젰
-  - 寃곌낵 row 異쒕젰
-  - 留덉?留됱뿉 `N rows selected.`
-- ?ㅻ쪟 諛쒖깮 ??
+- SELECT 성공 시:
+  - 선택 컬럼 헤더 출력
+  - 결과 row 출력
+  - 마지막에 `N rows selected.`
+- 오류 발생 시:
   - `Parse error`
   - `Schema error`
   - `Table error`
   - `Execution error`
 
-??
+예:
 - `Schema error: column 'age2' does not exist`
 - `Table error: table 'school.users' not found`
 
 ---
 
-## 援ы쁽 ?곗꽑?쒖쐞
-1. `schema.table` ?뚯떛
-2. 硫뷀? CSV ?뚯씪 濡쒕뜑 援ы쁽
-3. 諛붿씠?덈━ row ???援ы쁽
-4. `INSERT` 援ы쁽
-5. 諛붿씠?덈━ row ?쎄린 援ы쁽
-6. `SELECT *` 援ы쁽
-7. ?뱀젙 而щ읆 ?좏깮 援ы쁽
-8. `WHERE column = value` 援ы쁽
-9. REPL 異붽?
-10. ?먮윭 硫붿떆吏 媛쒖꽑
+## 구현 우선순위
+1. lexer 구현
+2. parser 구현
+3. 노드 기반 AST 구성
+4. 메타 CSV 파일 로더 구현
+5. 바이너리 row 저장 구현
+6. `INSERT` 구현
+7. 바이너리 row 읽기 구현
+8. `SELECT *` 구현
+9. 특정 컬럼 선택 구현
+10. `WHERE column operator value` 구현
+11. REPL 추가
+12. 에러 메시지 개선
 
 ---
 
-## ?뚯뒪??泥댄겕由ъ뒪??
-### 硫뷀??뚯씪 ?뚯뒪??- 硫뷀? CSV ?뚯씪 ?뺤긽 濡쒕뵫
-- 而щ읆 ??怨꾩궛
-- offset 怨꾩궛
-- row_size 怨꾩궛
+## 테스트 체크리스트
 
-### INSERT ?뚯뒪??- ?뺤긽 row ???- 媛?媛쒖닔 遺덉씪移??ㅻ쪟
-- ???遺덉씪移??ㅻ쪟
-- ?녿뒗 table ?ㅻ쪟
+### 메타파일 테스트
+- 메타 CSV 파일 정상 로딩
+- 컬럼 수 계산
+- offset 계산
+- row_size 계산
 
-### SELECT ?뚯뒪??- ?꾩껜 row 議고쉶
-- ?뱀젙 而щ읆 議고쉶
-- WHERE 議곌굔 議고쉶
-- ?녿뒗 而щ읆 ?ㅻ쪟
+### INSERT 테스트
+- 정상 row 저장
+- 값 개수 불일치 오류
+- 타입 불일치 오류
+- 없는 table 오류
 
-### 諛붿씠?덈━ ?쎄린 ?뚯뒪??- `INT` 蹂듭썝 ?뺤긽 ?숈옉
-- `CHAR(n)` 蹂듭썝 ?뺤긽 ?숈옉
-- 吏㏃? 臾몄옄??padding 泥섎━ ?뺤씤
+### SELECT 테스트
+- 전체 row 조회
+- 특정 컬럼 조회
+- WHERE 조건 조회
+- 없는 컬럼 오류
+- `=`, `!=`, `>`, `>=`, `<`, `<=` 비교 확인
+
+### 바이너리 읽기 테스트
+- `INT` 복원 정상 동작
+- `CHAR(n)` 복원 정상 동작
+- 짧은 문자열 padding 처리 확인
 
 ---
 
-## ? ?묒뾽 ?먯튃
-- AI媛 ?앹꽦??肄붾뱶?쇰룄 諛섎뱶??吏곸젒 ?쎄퀬 ?댄빐?쒕떎.
-- ?듭떖 濡쒖쭅? ??먯씠 吏곸젒 ?ㅻ챸?????덉뼱???쒕떎.
-- 援ы쁽 踰붿쐞瑜?踰쀬뼱?섎뒗 湲곕뒫? ?뺤옣 ?꾩씠?붿뼱濡쒕쭔 ?붾떎.
-- ?꾩옱 踰꾩쟾? 諛붿씠?덈━ 湲곕컲 誘몃땲 SQL 泥섎━湲곗씠硫? ?ㅼ젣 DB ?꾩껜瑜??ы쁽?섎뒗 寃껋씠 紐⑺몴???꾨땲??
+## 팀 작업 원칙
+- AI가 생성한 코드라도 반드시 직접 읽고 이해한다.
+- 핵심 로직은 팀원이 직접 설명할 수 있어야 한다.
+- 구현 범위를 벗어나는 기능은 확장 아이디어로만 둔다.
+- 현재 버전은 바이너리 기반 미니 SQL 처리기이며, 실제 DB 전체를 재현하는 것이 목표는 아니다.
 
 ---
 
-## 諛쒗몴???듭떖 臾몄옣
-???꾨줈?앺듃??`schema` ?꾨옒???대? 議댁옱?섎뒗 `table`????곸쑝濡? SQL 臾몄옣??AST濡??뚯떛????而щ읆 硫뷀??뺣낫??CSV濡? ?ㅼ젣 row ?곗씠?곕뒗 諛붿씠?덈━濡?愿由ы븯??`INSERT`? `SELECT`瑜??섑뻾?섎뒗 誘몃땲 SQL 泥섎━湲곗씠??
-```
-
+## 발표용 핵심 문장
+이 프로젝트는 `schema` 아래에 이미 존재하는 `table`을 대상으로, SQL 문장을 노드 기반 AST로 파싱한 뒤 컬럼 메타정보는 CSV로, 실제 row 데이터는 바이너리로 관리하여 `INSERT`와 `SELECT`를 수행하는 미니 SQL 처리기이다.

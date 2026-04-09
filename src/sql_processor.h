@@ -87,29 +87,35 @@ typedef struct ASTNode {
     struct ASTNode *next_sibling;
 } ASTNode;
 
-/* 메타 CSV에서 읽어온 저장 타입이다. */
+/* 메타 CSV에서 읽어온 컬럼 저장 타입이다. */
 typedef enum {
-    COL_INT,
-    COL_CHAR
+    COL_INT,   /* 4바이트 정수 컬럼 */
+    COL_CHAR   /* 고정 길이 문자 컬럼 */
 } ColumnType;
 
-/* 컬럼 하나의 메타정보다. size와 offset은 바이너리 row 해석에 쓰인다. */
+/*
+ * 컬럼 하나의 메타정보다.
+ * 바이너리 row를 해석하거나 쓸 때 각 컬럼의 이름, 타입, 크기, 시작 위치를 알려준다.
+ */
 typedef struct {
-    char name[MAX_NAME_LEN];
-    ColumnType type;
-    int size;
-    int offset;
+    char name[MAX_NAME_LEN];  /* 컬럼 이름: id, name, age */
+    ColumnType type;          /* 컬럼 저장 타입: INT 또는 CHAR */
+    int size;                 /* 이 컬럼이 row 안에서 차지하는 바이트 수 */
+    int offset;               /* row 시작점 기준 이 컬럼이 시작하는 바이트 위치 */
 } ColumnDef;
 
-/* 특정 schema.table 전체의 메타정보를 메모리에 올린 구조체다. */
+/*
+ * 특정 schema.table 전체의 메타정보를 메모리에 올린 구조체다.
+ * 메타 CSV를 읽은 뒤 실행기와 저장소 계층이 이 구조를 기준으로 동작한다.
+ */
 typedef struct {
-    char schema_name[MAX_NAME_LEN];
-    char table_name[MAX_NAME_LEN];
-    ColumnDef columns[MAX_COLUMNS];
-    int column_count;
-    int row_size;
-    char data_file_path[MAX_PATH_LEN];
-    char meta_file_path[MAX_PATH_LEN];
+    char schema_name[MAX_NAME_LEN];     /* 스키마 이름: school */
+    char table_name[MAX_NAME_LEN];      /* 테이블 이름: users */
+    ColumnDef columns[MAX_COLUMNS];     /* 이 테이블이 가진 컬럼 목록 */
+    int column_count;                   /* 실제로 로드된 컬럼 개수 */
+    int row_size;                       /* row 하나 전체 크기 = 모든 컬럼 size의 합 */
+    char data_file_path[MAX_PATH_LEN];  /* 실제 바이너리 데이터 파일 경로 */
+    char meta_file_path[MAX_PATH_LEN];  /* 메타 CSV 파일 경로 */
 } TableMeta;
 
 /* 함수 성공 여부와 사용자에게 보여줄 메시지를 함께 전달한다. */

@@ -45,11 +45,11 @@ int load_table_meta(const char *schema_name, const char *table_name, TableMeta *
     int column_count = 0;
     int offset = 0;
 
-    memset(meta, 0, sizeof(*meta));
-    snprintf(meta->schema_name, sizeof(meta->schema_name), "%s", schema_name);
-    snprintf(meta->table_name, sizeof(meta->table_name), "%s", table_name);
-    snprintf(meta->meta_file_path, sizeof(meta->meta_file_path), "meta\\%s\\%s.schema.csv", schema_name, table_name);
-    snprintf(meta->data_file_path, sizeof(meta->data_file_path), "data\\%s\\%s.dat", schema_name, table_name);
+    memset(meta, 0, sizeof(*meta)); // meat에 모두 0으로 채움
+    snprintf(meta->schema_name, sizeof(meta->schema_name), "%s", schema_name); // 각각 이름을 넣음
+    snprintf(meta->table_name, sizeof(meta->table_name), "%s", table_name); // 각각 이름을 넣음
+    snprintf(meta->meta_file_path, sizeof(meta->meta_file_path), "meta\\%s\\%s.schema.csv", schema_name, table_name); // 각각 이름을 넣음
+    snprintf(meta->data_file_path, sizeof(meta->data_file_path), "data\\%s\\%s.dat", schema_name, table_name); // 각각 이름을 넣음
 
     file = fopen(meta->meta_file_path, "r");
     if (file == NULL) {

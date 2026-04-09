@@ -185,7 +185,7 @@ static ASTNode *parse_where_node(Parser *parser, Status *status) {
     ASTNode *value_node;
     char *column_name;
     const char *operator_text;
-
+    
     column_name = parse_identifier_text(parser, status, "Parse error: expected WHERE column");
     if (column_name == NULL) {
         return NULL;

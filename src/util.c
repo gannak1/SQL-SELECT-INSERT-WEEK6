@@ -19,7 +19,7 @@ char *sp_strdup(const char *text) {
         return NULL;
     }
 
-    memcpy(copy, text, length + 1);
+    memcpy(copy, text, length + 1); // copy에 text를 복사해서 넣음
     return copy;
 }
 

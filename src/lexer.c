@@ -43,7 +43,6 @@ static TokenType keyword_type(const char *text) {
 TokenArray lex_sql(const char *sql, Status *status) {
     TokenArray array;
     const char *cursor;
-
     array.items = NULL;
     array.count = 0;
     cursor = sql;
